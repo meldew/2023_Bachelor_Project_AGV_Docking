@@ -3,7 +3,6 @@ import subprocess
 import rospy
 from ar_track_alvar_msgs.msg import AlvarMarkers
 import tf.transformations as tf
-#test
 
 def ar_pose_marker_cb(msg):
 	n_of_markers_detected = len(msg.markers)
