@@ -1,7 +1,7 @@
 from math import sin, cos, pi, sqrt
 import numpy as np
 
-def omnidirectional_robot_model(vx, vy, omega,d):
+def omnidirectional_robotino_model_inverse(vx, vy, omega,d):
 
     # Inverse Kinematics
     Ug = np.matrix([[vx],[vy],[omega]]) 
@@ -13,6 +13,6 @@ def omnidirectional_robot_model(vx, vy, omega,d):
     Vtot = Sg.dot(Ug)
     return Vtot[0,0],Vtot[1,0],Vtot[2,0]
     
+def   omnidirectional_robotino_model_inverse():
+    pass   
 
-Vx, Vy, Theta = omnidirectional_robot_model(1, 1, pi/2,0.5)
-print("x: ", Vx, "y: ", Vy, "theta: ", Theta)
