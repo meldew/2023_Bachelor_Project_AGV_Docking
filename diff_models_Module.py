@@ -10,7 +10,7 @@ def omnidirectional_robotino_model_inverse(vx, vy, omega,d):
                     [0,-1,d],
                     [-sin(pi/3),cos(pi/3),d]])
     
-    Vtot = Sg.dot(Ug)
+    Vtot = Sg * Ug
     return Vtot[0,0],Vtot[1,0],Vtot[2,0]
 
 # https://www.itm.uni-stuttgart.de/lehre/praktikum-technische-dynamik/PDFfiles/P03_handout.pdf    
@@ -27,4 +27,3 @@ def omnidirectional_robotino_model_forward(d, L, w1, w2 ,w3,theta):
     Wtot = R * (Jinv * V)
     
     return Wtot[0,0],Wtot[1,0],Wtot[2,0] 
-
