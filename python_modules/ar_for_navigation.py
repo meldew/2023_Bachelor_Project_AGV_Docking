@@ -71,8 +71,15 @@ def ar_pose_marker_cb(msg):
 				Robots_odometry_msg.pose.pose.orientation.w = q_w
 
 				pub.publish(navigetion_target)	# Navigation Target
+				# This Is not a correct solution for camear to world frame
+				#
+				# I fix
+				#
 				odom_pub.publish(Robots_odometry_msg) # Robot Odometry
-
+				#
+				#
+				#
+				#
 				marker_x_position = marker[index].pose.pose.position.x
 				marker_y_position = marker[index].pose.pose.position.y
 				marker_z_position = marker[index].pose.pose.position.z
