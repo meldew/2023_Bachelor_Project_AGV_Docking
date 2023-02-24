@@ -54,7 +54,7 @@ def ar_pose_marker_cb(msg):
 				ar_to_camera_Htm[2, 3] = p_z
 
 				# Find Camera to World transformation
-				camera_to_world = Camera_to_world_Htm(ar_to_camera_Htm,theta_x,theta_y,theta_z,translation)
+				camera_to_world = camera_to_world_Htm(ar_to_camera_Htm,theta_x,theta_y,theta_z,translation)
 				
 				# Transformating Euler Transofrmation matrix To Quaternion transform
 				x = camera_to_world[0, 3]
@@ -91,7 +91,7 @@ def ar_pose_marker_cb(msg):
 	cv.imshow('frame', image)
 	cv.waitKey(1)
 
-def Camera_to_world_Htm(ar_to_camera_Htm, thetax, thetay, thetaz, translation):
+def camera_to_world_Htm(ar_to_camera_Htm, thetax, thetay, thetaz, translation):
 	camera_to_arHtm = np.linalg.inv(np.asmatrix(ar_to_camera_Htm))
 	ar_to_world_Htm = ar_plasament_calibration(thetax, thetay, thetaz, translation)
 	camera_to_world = camera_to_arHtm * ar_to_world_Htm
@@ -124,7 +124,7 @@ def ar2cv2_coordinate(marker_x_position, marker_y_position, z_distance):
 	x_max_at_z_max = 0.37
 	y_min_at_z_max = -0.25
 	y_max_at_z_max = 0.25									
-	scale = Calculate_scale_factor(z_distance,z_min,z_max)
+	scale = calculate_scale_factor(z_distance,z_min,z_max)
 	x_min = x_min_at_z_min + (x_min_at_z_max - x_min_at_z_min) * scale
 	x_max = x_max_at_z_min + (x_max_at_z_max - x_max_at_z_min) * scale
 	y_min = y_min_at_z_min + (y_min_at_z_max - y_min_at_z_min) * scale
@@ -135,7 +135,7 @@ def ar2cv2_coordinate(marker_x_position, marker_y_position, z_distance):
 
 	return x_mapped,y_mapped
 
-def Calculate_scale_factor(z_distance,z_min,z_max):
+def calculate_scale_factor(z_distance,z_min,z_max):
     scale_factor = (z_distance - z_min) / (z_max - z_min)
     return scale_factor
 
