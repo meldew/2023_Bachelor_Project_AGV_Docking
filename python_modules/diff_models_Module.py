@@ -24,6 +24,6 @@ def omnidirectional_robotino_model_forward(d, L, w1, w2 ,w3,theta):
                       [d/3*L, d/3*L, d/3*L]])
     
     V = np.matrix([[w1],[w2],[w3]])
-    Wtot = R * (Jinv * V)
-    
-    return Wtot[0,0],Wtot[1,0],Wtot[2,0] 
+    lin_vel = R * (Jinv * V)
+    lin_x_vel, lin_y_vel, lin_theta_vel = lin_vel[0,0],lin_vel[1,0],lin_vel[2,0]
+    return lin_x_vel, lin_y_vel, lin_theta_vel
