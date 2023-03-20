@@ -18,6 +18,7 @@ move_cmd = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 image = None
 distance_to_marker = 0.0
 marker_x_position = 0.0
+marker_is_reached = False
 marker_is_detected = False
 target_marker = 3 
 MAX_ANGULAR_VEL = 0.1
@@ -32,61 +33,58 @@ def ar_pose_marker_cb(msg):
 	global marker, distance_to_marker,marker_x_position, marker_is_detected  
 	n_of_markers_detected = len(msg.markers)
 	marker = msg.markers 
-
 	marker_is_detected = False
 	if n_of_markers_detected > 0:
 		for index in range(n_of_markers_detected): 												
 			if marker[index].id == target_marker:
-				marker_is_detected = True
+				marker_is_detected = True				
 				marker_x_position = marker[index].pose.pose.position.x
 				marker_y_position = marker[index].pose.pose.position.y
 				distance_to_marker = marker[index].pose.pose.position.z
-				
-				final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
-				cv.circle(image,(final_x,final_y),6, (0, 255, 0), -1)
-				cv.putText(image, str(round(distance_to_marker * 100)) + " cm to Target!",(final_x + 40,final_y + 40), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
-	
-				
+				if marker_is_detected == True and not marker_is_reached:
+					final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
+					cv.circle(image,(final_x,final_y),6, (255, 0, 0), -1)
+					cv.putText(image, str(round(distance_to_marker * 100)) + " cm to Target!",(final_x + 40,final_y + 40), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
+					cv.putText(image, "Moving to Target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
+				elif marker_is_reached == True:
+					cv.putText(image, "Target is reached",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
+
 	cv.imshow('frame', image)
 	cv.waitKey(1)
 	
 def follow_goal_target(): 
+	global marker_is_reached
 	rate = rospy.Rate(10) 
 	last_marker_x_position = []
 	try: 
 		while not rospy.is_shutdown():
 			last_marker_x_position.append(marker_x_position)
 			last_marker_x_position = last_marker_x_position[-1:]
-			
 			if marker_is_detected == True: 
-				if distance_to_marker < 0.2: 
+				if distance_to_marker < 0.3: 
+					marker_is_reached = True 
 					stop_robot()
-					rospy.loginfo("Reached AR tag") 
+					rospy.loginfo("Reached AR tag")
 					break
 				twist = Twist()
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
-
 			elif marker_is_detected != True and last_marker_x_position[-1] == 0.0:
-				rospy.loginfo("Searching for tag")
+				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot()
-			
 			elif marker_is_detected != True and last_marker_x_position[-1] > 0.0:
-				rospy.loginfo("Target lost. Searching for tag")
+				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_right()
-
 			elif marker_is_detected != True and last_marker_x_position[-1] < 0.0:
-				rospy.loginfo("Target lost. Searching for tag")
+				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_left()
-			
 			else: 
 				stop_robot()
+
 			rate.sleep()
-			
 	except:
 		print(e) 
-
 	finally: 
 		stop_robot()
 
@@ -100,7 +98,7 @@ def stop_robot():
 def turn_robot():
 	twist = Twist()
 	twist.linear.x = 0
-	twist.angular.z = 0.2
+	twist.angular.z = 0.1
 	move_cmd.publish(twist)
 
 def turn_robot_left():
