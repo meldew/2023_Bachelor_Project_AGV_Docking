@@ -18,6 +18,7 @@ bridge = cv_bridge.CvBridge()
 # Publishing the message to the topic /cmd_vel.
 move_cmd = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
+# Declaring the global variables.
 image = None
 distance_to_marker = 0.0
 marker_x_position = 0.0
