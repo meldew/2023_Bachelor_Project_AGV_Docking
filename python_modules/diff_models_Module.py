@@ -4,6 +4,17 @@ import numpy as np
 
 # file:///C:/Users/melde/Downloads/Goncalves_ETFA_2008%20(3).pdf
 def omnidirectional_robotino_model_inverse(vx, vy, omega,d):
+    """
+    The function takes in the desired linear velocity in the x and y directions, the desired angular
+    velocity, and the distance between the wheels and the center of the robot, and returns the linear
+    velocities of the three wheels
+    
+    :param vx: linear velocity in the x direction
+    :param vy: velocity in the y direction
+    :param omega: angular velocity
+    :param d: distance between the center of the robot and the center of the wheels
+    :return: the velocities of the three wheels.
+    """
     Ug = np.matrix([[vx],[vy],[omega]]) 
 
     Sg = np.matrix([[-sin(pi/3), cos(pi/3),d],
@@ -16,6 +27,18 @@ def omnidirectional_robotino_model_inverse(vx, vy, omega,d):
 
 # https://www.itm.uni-stuttgart.de/lehre/praktikum-technische-dynamik/PDFfiles/P03_handout.pdf    
 def omnidirectional_robotino_model_forward(d, L, w1, w2 ,w3,theta):
+    """
+    The function takes in the robot's wheel velocities, the distance between the wheels, the length of
+    the wheels, and the robot's orientation, and returns the robot's linear and angular velocities
+    
+    :param d: distance between the center of the robot and the center of the wheels
+    :param L: distance between the center of the robot and the center of the wheels
+    :param w1: angular velocity of wheel 1
+    :param w2: angular velocity of the middle wheel
+    :param w3: angular velocity of the third wheel
+    :param theta: the orientation of the robot in the world frame
+    :return: The linear velocity in the x, y, and theta directions.
+    """
     R = np.matrix([[cos(theta), -sin(theta),0],
                    [sin(theta), cos(theta),0],
                    [0,0,1]])
