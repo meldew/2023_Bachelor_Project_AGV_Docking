@@ -11,8 +11,11 @@ import rospy
 import math
 import time
 
+# Creating a new Odometry message and assigning it to the variable Robots_pose_msg.
 Robots_pose_msg = Odometry()
+# It converts the image from ROS format to OpenCV format.
 bridge = cv_bridge.CvBridge()
+# Publishing the message to the topic /cmd_vel.
 move_cmd = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
 image = None
@@ -25,11 +28,26 @@ MAX_ANGULAR_VEL = 0.1
 MAX_LINEAR_VEL = 0.1	
 e = ""
 
+
 def img_from_camera_cb(img):
+	"""
+	It converts the image from ROS format to OpenCV format.
+	:param img: The image from the camera
+	"""
 	global image
 	image = bridge.imgmsg_to_cv2(img,desired_encoding='bgr8')
 
+
 def ar_pose_marker_cb(msg):	
+	"""
+	The function is called every time a new message is received from the topic /ar_pose_marker. The
+	function checks if the target marker is detected and if it is, it calculates the distance to the
+	marker and the coordinates of the marker in the image. If the marker is detected, the function draws
+	a circle around the marker and displays the distance to the marker. If the marker is not detected,
+	the function displays a message that the marker is not detected
+	
+	:param msg: The message that is received from the topic
+	"""
 	global marker, distance_to_marker,marker_x_position, marker_is_detected  
 	n_of_markers_detected = len(msg.markers)
 	marker = msg.markers 
@@ -52,12 +70,22 @@ def ar_pose_marker_cb(msg):
 	cv.imshow('frame', image)
 	cv.waitKey(1)
 	
+
 def follow_goal_target(): 
+	"""
+	The robot will move forward until it reaches the AR tag. 
+	The robot will turn left or right if it can't find the AR tag. 
+	The robot will stop if it reaches the AR tag. 
+	The robot will stop if it can't find the AR tag. 
+	The robot will stop if the program is interrupted.
+	"""
 	global marker_is_reached
 	rate = rospy.Rate(10) 
 	last_marker_x_position = []
 	try: 
 		while not rospy.is_shutdown():
+			# The above code is a simple proportional controller that is used to control the robot's linear and
+			# angular velocity.
 			last_marker_x_position.append(marker_x_position)
 			last_marker_x_position = last_marker_x_position[-1:]
 			if marker_is_detected == True: 
@@ -70,12 +98,18 @@ def follow_goal_target():
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
+			# Checking if the marker is not detected and the last marker x position is 0.0. If it is, it will
+			# display a message that it is searching for the target and turn the robot.
 			elif marker_is_detected != True and last_marker_x_position[-1] == 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot()
+			# Checking if the marker is not detected and the last marker x position is greater than 0.0. If it
+			# is, it will display a message that it is searching for the target and turn the robot right.
 			elif marker_is_detected != True and last_marker_x_position[-1] > 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_right()
+			# Checking if the marker is not detected and the last marker x position is less than 0.0. If it is,
+			# it will display a message that it is searching for the target and turn the robot left.
 			elif marker_is_detected != True and last_marker_x_position[-1] < 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_left()
@@ -88,40 +122,91 @@ def follow_goal_target():
 	finally: 
 		stop_robot()
 
+
 def stop_robot():
+	"""
+	It creates a new Twist message, sets the linear and angular velocities to zero, and publishes the
+	message to the move_cmd topic
+	"""
 	twist = Twist()
 	twist.linear.x = 0.0
 	twist.angular.z = 0.0
 	move_cmd.publish(twist)
 	time.sleep(2)
 
+
 def turn_robot():
+	"""
+	The function turn_robot() publishes a twist message to the topic /cmd_vel. The twist message has a
+	linear velocity of 0 and an angular velocity of 0.1
+	"""
 	twist = Twist()
 	twist.linear.x = 0
 	twist.angular.z = 0.1
 	move_cmd.publish(twist)
 
+
 def turn_robot_left():
+	"""
+	It turns the robot left.
+	"""
 	twist = Twist()
 	twist.linear.x = 0
 	twist.angular.z = MAX_ANGULAR_VEL
 	move_cmd.publish(twist)
 
+
 def turn_robot_right():
+	"""
+	It creates a Twist message, sets the linear velocity to 0 and the angular velocity to
+	-MAX_ANGULAR_VEL, and publishes the message to the move_cmd topic
+	"""
 	twist = Twist()
 	twist.linear.x = 0
 	twist.angular.z = -MAX_ANGULAR_VEL
 	move_cmd.publish(twist)
 
+
 def map_coordinate(value, in_min, in_max, out_min, out_max):
-    return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+	"""
+	> It takes a value, a minimum and maximum value for the input range, and a minimum and maximum value
+	for the output range, and returns the value mapped from the input range to the output range
+	
+	:param value: The value to be mapped
+	:param in_min: the minimum value of the input range
+	:param in_max: the maximum value of the input range
+	:param out_min: The minimum value of the output range
+	:param out_max: The maximum value of the output range
+	:return: The value of the input mapped to the output range.
+	"""
+	return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
 
 def qt2eul_func(x,y,z,w):
+	"""
+	It takes in a quaternion and returns the corresponding homogeneous transformation matrix
+	
+	:param x: 0.0
+	:param y: The yaw angle in radians
+	:param z: 0.0
+	:param w: 0.0
+	:return: the quaternion matrix.
+	"""
 	quaterion = [x,y,z,w]
 	Htm = tf.quaternion_matrix(quaterion)
 	return Htm
 		
+
 def ar2cv2_coordinate(marker_x_position, marker_y_position, z_distance):
+	"""
+	The function takes the marker's x and y position in the AR coordinate system and the distance from
+	the camera to the marker, and returns the marker's x and y position in the OpenCV coordinate system
+	
+	:param marker_x_position: The x position of the marker in the AR coordinate system
+	:param marker_y_position: The y position of the marker in the AR coordinate system
+	:param z_distance: The distance from the camera to the marker
+	:return: The x and y coordinates of the marker in the image.
+	"""
 	z_min = 0.20
 	z_max = 0.90
 	x_min_at_z_min = -0.074
@@ -145,16 +230,30 @@ def ar2cv2_coordinate(marker_x_position, marker_y_position, z_distance):
 	return x_mapped,y_mapped
 
 def calculate_scale_factor(z_distance,z_min,z_max):
-    scale_factor = (z_distance - z_min) / (z_max - z_min)
-    return scale_factor
+	"""
+	> The function takes in a z_distance, z_min, and z_max and returns a scale factor
+	
+	:param z_distance: The distance from the camera to the object
+	:param z_min: The minimum distance from the camera that you want to be able to see
+	:param z_max: The maximum distance from the camera that you want to render
+	:return: The scale factor is being returned.
+	"""
+	scale_factor = (z_distance - z_min) / (z_max - z_min)
+	return scale_factor
 
 def main():
+	# Waiting for the message from the topic /ar_pose_marker.
 	rospy.init_node('ar_tag_navigation_node')
 	rospy.loginfo("Waiting for ar_pose_marker topic...")
 	rospy.wait_for_message('ar_pose_marker', AlvarMarkers)
+
+	
+	# Subscribing to the topic /ar_pose_marker and calling the function ar_pose_marker_cb() every time a
+	# new message is received.
 	rospy.Subscriber('/ar_pose_marker',AlvarMarkers, ar_pose_marker_cb)
 	rospy.loginfo("Marker messages detected. Starting follower...")
 	rospy.Subscriber('/image_view/output',Image,img_from_camera_cb)
+	# Calling the function follow_goal_target()
 	follow_goal_target()
 	
 	
