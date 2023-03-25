@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from tf.transformations import euler_from_quaternion
 from ar_track_alvar_msgs.msg import AlvarMarkers
 from geometry_msgs.msg import Twist,PoseStamped
 from sensor_msgs.msg import	Image
@@ -26,7 +27,9 @@ marker_is_reached = False
 marker_is_detected = False
 target_marker = 3 
 MAX_ANGULAR_VEL = 0.1
-MAX_LINEAR_VEL = 0.1	
+MAX_LINEAR_VEL = 0.1
+ANGLE_TOLERANCE = 0.01
+X_MARKER_PLACEMENT = 0.01	
 e = ""
 
 
@@ -49,7 +52,7 @@ def ar_pose_marker_cb(msg):
 	
 	:param msg: The message that is received from the topic
 	"""
-	global marker, distance_to_marker,marker_x_position, marker_is_detected  
+	global marker, distance_to_marker,marker_x_position, marker_is_detected, pitch  
 	n_of_markers_detected = len(msg.markers)
 	marker = msg.markers 
 	marker_is_detected = False
@@ -60,9 +63,13 @@ def ar_pose_marker_cb(msg):
 				marker_x_position = marker[index].pose.pose.position.x
 				marker_y_position = marker[index].pose.pose.position.y
 				distance_to_marker = marker[index].pose.pose.position.z
+				tag_pose = msg.markers[index].pose.pose
+				tag_orientation = tag_pose.orientation
+				roll, pitch, yaw = euler_from_quaternion([-tag_orientation.x, -tag_orientation.y, -tag_orientation.z, tag_orientation.w])
+
 				if marker_is_detected == True and not marker_is_reached:
 					final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
-					cv.circle(image,(final_x,final_y),6, (255, 0, 0), -1)
+					cv.circle(image,(final_x,final_y),6, (0, 255, 0), -1)
 					cv.putText(image, str(round(distance_to_marker * 100)) + " cm to Target!",(final_x + 40,final_y + 40), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 					cv.putText(image, "Moving to Target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				elif marker_is_reached == True:
@@ -89,16 +96,23 @@ def follow_goal_target():
 			# angular velocity.
 			last_marker_x_position.append(marker_x_position)
 			last_marker_x_position = last_marker_x_position[-1:]
-			if marker_is_detected == True: 
-				if distance_to_marker < 0.3: 
-					marker_is_reached = True 
-					stop_robot()
-					rospy.loginfo("Reached AR tag")
-					break
+			
+			if marker_is_detected == True:
 				twist = Twist()
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
+
+				if distance_to_marker <= 0.6: 
+					twist = Twist()
+					twist.linear.x = 0.0
+					twist.linear.y = marker_x_position * 1.5
+					twist.angular.z = -0.5 * pitch
+					move_cmd.publish(twist)
+
+					if abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE: 
+						stop_robot()
+						break
 			# Checking if the marker is not detected and the last marker x position is 0.0. If it is, it will
 			# display a message that it is searching for the target and turn the robot.
 			elif marker_is_detected != True and last_marker_x_position[-1] == 0.0:
