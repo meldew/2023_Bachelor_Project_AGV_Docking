@@ -92,25 +92,26 @@ def follow_goal_target():
 	last_marker_x_position = []
 	try: 
 		while not rospy.is_shutdown():
-			# The above code is a simple proportional controller that is used to control the robot's linear and
-			# angular velocity.
+			# The above code is a part of the code that is used to calibrate the robot. The robot is calibrated
+			# by moving the robot to a certain distance from the marker and then moving the robot to a certain
+			# orientation.
 			last_marker_x_position.append(marker_x_position)
 			last_marker_x_position = last_marker_x_position[-1:]
-			
 			if marker_is_detected == True:
+				rospy.loginfo("Calibrating Distance")
 				twist = Twist()
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
-
-				if distance_to_marker <= 0.6: 
+				if distance_to_marker <= 0.6:
+					rospy.loginfo("Calibrating Orientation") 
 					twist = Twist()
 					twist.linear.x = 0.0
 					twist.linear.y = marker_x_position * 1.5
 					twist.angular.z = -0.5 * pitch
 					move_cmd.publish(twist)
-
-					if abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE: 
+					if abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE:
+						rospy.loginfo("Orientation is calibrated") 
 						stop_robot()
 						break
 			# Checking if the marker is not detected and the last marker x position is 0.0. If it is, it will
