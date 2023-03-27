@@ -80,13 +80,10 @@ def ar_pose_marker_cb(msg):
 	cv.waitKey(1)
 	
 
-def follow_goal_target(): 
+def follow_goal_target(): 	
 	"""
-	The robot will move forward until it reaches the AR tag. 
-	The robot will turn left or right if it can't find the AR tag. 
-	The robot will stop if it reaches the AR tag. 
-	The robot will stop if it can't find the AR tag. 
-	The robot will stop if the program is interrupted.
+	The above code is designed and tested for and with the <<Robotino>>.
+	The Robotino will move to a certain distance from the marker and then move to a certain orientation.
 	"""
 	global marker_is_reached
 	rate = rospy.Rate(10) 
