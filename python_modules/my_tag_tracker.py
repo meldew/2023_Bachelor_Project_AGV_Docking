@@ -29,7 +29,8 @@ target_marker = 3
 MAX_ANGULAR_VEL = 0.1
 MAX_LINEAR_VEL = 0.1
 ANGLE_TOLERANCE = 0.01
-X_MARKER_PLACEMENT = 0.01	
+X_MARKER_PLACEMENT = 0.01
+MAX_CALIBRATING_DISTANCE = 0.5	
 e = ""
 
 
@@ -97,23 +98,23 @@ def follow_goal_target():
 			# orientation.
 			last_marker_x_position.append(marker_x_position)
 			last_marker_x_position = last_marker_x_position[-1:]
-			if marker_is_detected == True:
+			if marker_is_detected == True and distance_to_marker > MAX_CALIBRATING_DISTANCE:
 				rospy.loginfo("Calibrating Distance")
 				twist = Twist()
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
-				if distance_to_marker <= 0.6:
-					rospy.loginfo("Calibrating Orientation") 
-					twist = Twist()
-					twist.linear.x = 0.0
-					twist.linear.y = marker_x_position * 1.5
-					twist.angular.z = -0.5 * pitch
-					move_cmd.publish(twist)
-					if abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE:
-						rospy.loginfo("Orientation is calibrated") 
-						stop_robot()
-						break
+			elif distance_to_marker < MAX_CALIBRATING_DISTANCE and marker_is_detected == True:
+				rospy.loginfo("Calibrating Orientation") 
+				twist = Twist()
+				twist.linear.x = 0.0
+				twist.linear.y = -marker_x_position * 0.8
+				twist.angular.z = -0.2 * pitch
+				move_cmd.publish(twist)
+				if abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE:
+					rospy.loginfo("Orientation is calibrated") 
+					stop_robot()
+					break
 			# Checking if the marker is not detected and the last marker x position is 0.0. If it is, it will
 			# display a message that it is searching for the target and turn the robot.
 			elif marker_is_detected != True and last_marker_x_position[-1] == 0.0:
@@ -185,7 +186,7 @@ def turn_robot_right():
 
 def map_coordinate(value, in_min, in_max, out_min, out_max):
 	"""
-	> It takes a value, a minimum and maximum value for the input range, and a minimum and maximum value
+	It takes a value, a minimum and maximum value for the input range, and a minimum and maximum value
 	for the output range, and returns the value mapped from the input range to the output range
 	
 	:param value: The value to be mapped
