@@ -85,6 +85,7 @@ def follow_goal_target():
 	The above code is designed and tested for and with the <<Robotino>>.
 	The Robotino will move to a certain distance from the marker and then move to a certain orientation.
 	"""
+	
 	global marker_is_reached
 	rate = rospy.Rate(10) 
 	last_marker_x_position = []
