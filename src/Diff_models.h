@@ -1,5 +1,3 @@
-#ifndef MYLIBRARY_H_
-#define MYLIBRARY_H_
 #include <iostream>
 #include <cmath>
 #include"C:\\Library\\eigen-3.4.0\\Eigen\\Dense" //path to eigen library, link for sownload .zip https://eigen.tuxfamily.org/index.php?title=Main_Page
@@ -66,4 +64,4 @@ namespace diff_model_lib
     }
 
 }
-#endif
+
