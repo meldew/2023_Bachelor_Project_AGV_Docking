@@ -2,7 +2,7 @@
 #include "Diff_models.h"
 using namespace diff_model_lib;
 
-//Exemple code for how to use the my library
+//Exemple code for how to use my library
 
 int main()
 {
