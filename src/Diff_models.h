@@ -62,6 +62,5 @@ namespace diff_model_lib
         double lin_theta_vel = lin_vel(2);
         return Eigen::Vector3d(lin_x_vel, lin_y_vel, lin_theta_vel);
     }
-
 }
 

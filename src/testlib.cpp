@@ -6,6 +6,6 @@ using namespace diff_model_lib;
 
 int main()
 {
-    std::cout << diff_model_lib::omnidirectional_robotino_model_inverse(1, 1, 1, 1);;
+    std::cout << diff_model_lib::omnidirectional_robotino_model_inverse(5.5, 1, 1, 1);
     return 0;
 }
