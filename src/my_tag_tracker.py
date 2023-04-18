@@ -122,10 +122,8 @@ def follow_goal_target():
 				twist.linear.y = -marker_x_position * 0.8
 				twist.angular.z = -0.2 * pitch
 				move_cmd.publish(twist)
-				orientation_calibrated = True
 				if abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE:
 					rospy.loginfo("Orientation is calibrated") 
-					orientation_calibrated = False
 					move_robot_forward()
 					if abs(marker_x_position) < X_MARKER_PLACEMENT and distance_to_marker <= PARKING_DISTANCE: 
 						stop_robot()
