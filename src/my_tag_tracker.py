@@ -21,18 +21,19 @@ move_cmd = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
 # Declaring the global variables.
 image = None
+angular_z = 0.0
+orientation_calibrated = False
 distance_to_marker = 0.0
 marker_x_position = 0.0
 Parked_state = False
 marker_is_reached = False
 marker_is_detected = False
 target_marker = 3 
-orientation_calibrated = False
 MAX_ANGULAR_VEL = 0.1
 MAX_LINEAR_VEL = 0.03
 MAX_LIN_VEL_PARKING = 0.02
 PARKING_DISTANCE = 0.19
-ANGLE_TOLERANCE = 0.01
+ANGLE_TOLERANCE = 0.001
 X_MARKER_PLACEMENT = 0.003
 MAX_CALIBRATING_DISTANCE = 0.3	
 e = ""
@@ -99,7 +100,8 @@ def follow_goal_target():
 	The robot will stop if it can't find the AR tag. 
 	The robot will stop if the program is interrupted.
 	"""
-	global marker_is_reached, Parked_state, orientation_calibrated
+	global marker_is_reached, Parked_state, angular_z
+	orientation_calibrated = False
 	rate = rospy.Rate(10) 
 	last_marker_x_position = []
 	try: 
@@ -109,13 +111,14 @@ def follow_goal_target():
 			# orientation.
 			last_marker_x_position.append(marker_x_position)
 			last_marker_x_position = last_marker_x_position[-1:]
-			
+
 			if marker_is_detected == True and distance_to_marker > MAX_CALIBRATING_DISTANCE:
 				rospy.loginfo("Calibrating Distance")
 				twist = Twist()
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
+				rospy.loginfo(orientation_calibrated)
 
 			elif not orientation_calibrated and distance_to_marker < MAX_CALIBRATING_DISTANCE and marker_is_detected:
 				rospy.loginfo("Calibrating Orientation") 
@@ -124,18 +127,21 @@ def follow_goal_target():
 				twist.linear.y = -marker_x_position * 0.8
 				twist.angular.z = -0.2 * pitch
 				move_cmd.publish(twist)
+				angular_z = twist.angular.z
 
-			elif abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE:
-				rospy.loginfo("Orientation is calibrated") 
-				orientation_calibrated = True
+				if abs(marker_x_position) <= X_MARKER_PLACEMENT and abs(angular_z) <= ANGLE_TOLERANCE:
+					rospy.loginfo("Orientation is calibrated") 
+					orientation_calibrated = True
+
+			elif orientation_calibrated:
 				move_robot_forward()
 
-				if abs(marker_x_position) < X_MARKER_PLACEMENT and distance_to_marker <= PARKING_DISTANCE: 
+				if distance_to_marker < PARKING_DISTANCE: 
 					stop_robot()
 					Parked_state = True
 					rospy.loginfo("Parked")
 					break
-
+					
 			# Checking if the marker is not detected and the last marker x position is 0.0. If it is, it will
 			# display a message that it is searching for the target and turn the robot.
 			elif marker_is_detected != True and last_marker_x_position[-1] == 0.0:
@@ -147,9 +153,9 @@ def follow_goal_target():
 			elif marker_is_detected != True and last_marker_x_position[-1] > 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_right()
-
 			# Checking if the marker is not detected and the last marker x position is less than 0.0. If it is,
 			# it will display a message that it is searching for the target and turn the robot left.
+
 			elif marker_is_detected != True and last_marker_x_position[-1] < 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_left()
