@@ -109,12 +109,14 @@ def follow_goal_target():
 			# orientation.
 			last_marker_x_position.append(marker_x_position)
 			last_marker_x_position = last_marker_x_position[-1:]
+			
 			if marker_is_detected == True and distance_to_marker > MAX_CALIBRATING_DISTANCE:
 				rospy.loginfo("Calibrating Distance")
 				twist = Twist()
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
+
 			elif not orientation_calibrated and distance_to_marker < MAX_CALIBRATING_DISTANCE and marker_is_detected:
 				rospy.loginfo("Calibrating Orientation") 
 				twist = Twist()
@@ -122,25 +124,30 @@ def follow_goal_target():
 				twist.linear.y = -marker_x_position * 0.8
 				twist.angular.z = -0.2 * pitch
 				move_cmd.publish(twist)
+
 			elif abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE:
 				rospy.loginfo("Orientation is calibrated") 
 				orientation_calibrated = True
 				move_robot_forward()
+
 				if abs(marker_x_position) < X_MARKER_PLACEMENT and distance_to_marker <= PARKING_DISTANCE: 
 					stop_robot()
 					Parked_state = True
 					rospy.loginfo("Parked")
 					break
+
 			# Checking if the marker is not detected and the last marker x position is 0.0. If it is, it will
 			# display a message that it is searching for the target and turn the robot.
 			elif marker_is_detected != True and last_marker_x_position[-1] == 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot()
+
 			# Checking if the marker is not detected and the last marker x position is greater than 0.0. If it
 			# is, it will display a message that it is searching for the target and turn the robot right.
 			elif marker_is_detected != True and last_marker_x_position[-1] > 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_right()
+
 			# Checking if the marker is not detected and the last marker x position is less than 0.0. If it is,
 			# it will display a message that it is searching for the target and turn the robot left.
 			elif marker_is_detected != True and last_marker_x_position[-1] < 0.0:
