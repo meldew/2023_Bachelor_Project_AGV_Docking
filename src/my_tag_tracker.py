@@ -23,14 +23,18 @@ move_cmd = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 image = None
 distance_to_marker = 0.0
 marker_x_position = 0.0
+Parked_state = False
 marker_is_reached = False
 marker_is_detected = False
 target_marker = 3 
+orientation_calibrated = False
 MAX_ANGULAR_VEL = 0.1
-MAX_LINEAR_VEL = 0.1
+MAX_LINEAR_VEL = 0.03
+MAX_LIN_VEL_PARKING = 0.02
+PARKING_DISTANCE = 0.19
 ANGLE_TOLERANCE = 0.01
-X_MARKER_PLACEMENT = 0.01
-MAX_CALIBRATING_DISTANCE = 0.5	
+X_MARKER_PLACEMENT = 0.003
+MAX_CALIBRATING_DISTANCE = 0.3	
 e = ""
 
 
@@ -68,24 +72,34 @@ def ar_pose_marker_cb(msg):
 				tag_orientation = tag_pose.orientation
 				roll, pitch, yaw = euler_from_quaternion([-tag_orientation.x, -tag_orientation.y, -tag_orientation.z, tag_orientation.w])
 
-				if marker_is_detected == True and not marker_is_reached:
+				if marker_is_detected == True and not marker_is_reached and not Parked_state:
 					final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
 					cv.circle(image,(final_x,final_y),6, (0, 255, 0), -1)
 					cv.putText(image, str(round(distance_to_marker * 100)) + " cm to Target!",(final_x + 40,final_y + 40), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
-					cv.putText(image, "Moving to Target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
-				elif marker_is_reached == True:
-					cv.putText(image, "Target is reached",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
+					cv.putText(image, "Moving to target.",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
+
+				elif Parked_state == True: 
+					cv.putText(image, "Parked!",(300, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
+					final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
+					cv.circle(image,(final_x,final_y),6, (0, 255, 0), -1)
+					cv.putText(image, str(round(distance_to_marker * 100)) + " cm to Target!",(final_x + 40,final_y + 40), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
+				
+				else: 
+					cv.putText(image, "Searching for a target!.",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 
 	cv.imshow('frame', image)
 	cv.waitKey(1)
 	
 
-def follow_goal_target(): 	
+def follow_goal_target(): 
 	"""
-	The above code is designed and tested for and with the <<Robotino>>.
-	The Robotino will move to a certain distance from the marker and then move to a certain orientation.
+	The robot will move forward until it reaches the AR tag. 
+	The robot will turn left or right if it can't find the AR tag. 
+	The robot will stop if it reaches the AR tag. 
+	The robot will stop if it can't find the AR tag. 
+	The robot will stop if the program is interrupted.
 	"""
-	global marker_is_reached
+	global marker_is_reached, Parked_state, orientation_calibrated
 	rate = rospy.Rate(10) 
 	last_marker_x_position = []
 	try: 
@@ -108,10 +122,16 @@ def follow_goal_target():
 				twist.linear.y = -marker_x_position * 0.8
 				twist.angular.z = -0.2 * pitch
 				move_cmd.publish(twist)
+				orientation_calibrated = True
 				if abs(marker_x_position) < X_MARKER_PLACEMENT and abs(twist.angular.z) < ANGLE_TOLERANCE:
 					rospy.loginfo("Orientation is calibrated") 
-					stop_robot()
-					break
+					orientation_calibrated = False
+					move_robot_forward()
+					if abs(marker_x_position) < X_MARKER_PLACEMENT and distance_to_marker <= PARKING_DISTANCE: 
+						stop_robot()
+						Parked_state = True
+						rospy.loginfo("Parked")
+						break
 			# Checking if the marker is not detected and the last marker x position is 0.0. If it is, it will
 			# display a message that it is searching for the target and turn the robot.
 			elif marker_is_detected != True and last_marker_x_position[-1] == 0.0:
@@ -136,6 +156,17 @@ def follow_goal_target():
 	finally: 
 		stop_robot()
 
+
+def move_robot_forward():
+	"""
+	It creates a new Twist message, sets the linear velocitie to a slower speed so that robot can safely reach the target and 
+	sets angular velocitie to zero, and then publishes the
+	message to the move_cmd topic
+	"""
+	twist = Twist()
+	twist.linear.x = MAX_LIN_VEL_PARKING
+	twist.angular.z = 0.0
+	move_cmd.publish(twist)
 
 def stop_robot():
 	"""
