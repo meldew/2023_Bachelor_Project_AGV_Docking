@@ -19,7 +19,8 @@ bridge = cv_bridge.CvBridge()
 # Publishing the message to the topic /cmd_vel.
 move_cmd = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
-# Declaring the global variables.
+
+#region Global variables 
 image = None
 angular_z = 0.0
 orientation_calibrated = False
@@ -37,7 +38,7 @@ ANGLE_TOLERANCE = 0.001
 X_MARKER_PLACEMENT = 0.003
 MAX_CALIBRATING_DISTANCE = 0.3	
 e = ""
-
+#endregion
 
 def img_from_camera_cb(img):
 	"""
@@ -63,7 +64,8 @@ def ar_pose_marker_cb(msg):
 	marker = msg.markers 
 	marker_is_detected = False
 	if n_of_markers_detected > 0:
-		for index in range(n_of_markers_detected): 												
+		for index in range(n_of_markers_detected): 
+
 			if marker[index].id == target_marker:
 				marker_is_detected = True				
 				marker_x_position = marker[index].pose.pose.position.x
@@ -159,6 +161,7 @@ def follow_goal_target():
 			elif marker_is_detected != True and last_marker_x_position[-1] < 0.0:
 				cv.putText(image, "Searching target",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				turn_robot_left()
+
 			else: 
 				stop_robot()
 
@@ -288,8 +291,7 @@ def ar2cv2_coordinate(marker_x_position, marker_y_position, z_distance):
 
 def calculate_scale_factor(z_distance,z_min,z_max):
 	"""
-	> The function takes in a z_distance, z_min, and z_max and returns a scale factor
-	
+	The function takes in a z_distance, z_min, and z_max and returns a scale factor
 	:param z_distance: The distance from the camera to the object
 	:param z_min: The minimum distance from the camera that you want to be able to see
 	:param z_max: The maximum distance from the camera that you want to render
