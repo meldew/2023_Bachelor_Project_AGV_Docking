@@ -5,10 +5,10 @@ Bachelor project on autonomous docking of an AGV (mobile base: Robotino, cobot:U
 
 
 
-
 # Setup Instructions 
+
 NOTE:
-This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. Throughout the guide, make sure to follow the instructions for ROS Melodic and Robotino.
+This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. --Throughout the guide, make sure to follow the instructions for ROS Melodic and Robotino.
 
 Installation: 
 
@@ -24,8 +24,9 @@ Installation:
 ![image](https://user-images.githubusercontent.com/47281451/233087791-18f94cd3-e51c-4d5c-a45e-c037757fb8a0.png)
 
 4. Run:
- 
-> gedit ~/.bashrc 
+```
+gedit ~/.bashrc 
+```
 
 and make sure that the ROS_IP and ROS_MASTER_URI lines are commented out or deleted from the bottom of the file.
  
@@ -45,11 +46,11 @@ http://wiki.ros.org/ar_track_alvar
 # Camera Calibration
 
 1. Before running the calibration program, run the following commands (if usb_cam is not already installed, install it now):
-
-> roscore
-> 
-> rosrun usb_cam usb_cam_node
-
+```
+ roscore
+ 
+ rosrun usb_cam usb_cam_node
+```
 2. Run the calibration program:
 
 rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/usb_cam/image_raw camera:=/usb_cam
@@ -57,11 +58,11 @@ rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/
 3. Once the GUI is open, move a sheet of paper around in front of the webcam at different angles and distances until the "calibrate" button is highlighted. After it finishes calibrating, save and commit the calibration.
 
 4. Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
+```
+roslaunch ar_tag_toolbox usb_cam.launch cam_id:=2
 
-> roslaunch ar_tag_toolbox usb_cam.launch cam_id:=2
->
-> roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
-
+roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
+```
 5: Run the following command to see the ID of the AR Tag being detected:
 
 > rostopic echo /ar_pose_marker
@@ -69,55 +70,55 @@ rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/
 # Robot Setup 
 1. Connect the camera to Remote PC via USB.
 2. Run the following command to connect to Robotino:
-
-> ssh robotino@172.31.1.145
-
+```
+ssh robotino@172.31.1.145
+```
 3. Start the REST API to Robotino:
-
-> roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
-
+```
+roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
+```
 4. Start the AR tag tracker:
-
-> roslaunch ar_tag_toolbox my_ar_track.launch
-
+```
+roslaunch ar_tag_toolbox my_ar_track.launch
+```
 5. In Robotino_tag_tracker.py, set target_marker to the ID of your AR tag.
 6. Check if all these packages are installed:
 
 ![image](https://user-images.githubusercontent.com/47281451/233087925-e677eafa-ac74-4c86-aa96-db9d68995528.png)
 
+```
+from tf.transformations import euler_from_quaternion
 
-> from tf.transformations import euler_from_quaternion
->
-> from ar_track_alvar_msgs.msg import AlvarMarkers
->
-> from geometry_msgs.msg import Twist, PoseStamped
->
-> from sensor_msgs.msg import Image
->
-> from nav_msgs.msg import Odometry
->
-> import tf.transformations as tf
->
-> import numpy as np
->
-> import cv_bridge
->
-> import cv2 as cv
->
-> import rospy
->
-> import math
->
-> import time
+from ar_track_alvar_msgs.msg import AlvarMarkers
 
+from geometry_msgs.msg import Twist, PoseStamped
+
+from sensor_msgs.msg import Image
+
+from nav_msgs.msg import Odometry
+
+import tf.transformations as tf
+
+import numpy as np
+
+import cv_bridge
+
+import cv2 as cv
+
+import rospy
+
+import math
+
+import time
+```
 7. Save the file, place the tag in front of the camera, and run the following command:
-
-> rosrun ar_tag_toolbox Robotino_tag_tracker.py
-
+```
+rosrun ar_tag_toolbox Robotino_tag_tracker.py
+```
 
 It is also possible to control Robotino from the keyboard. If desired, the following command can be run: 
-
-> rosrun ar_tag_toolbox robotino_control_tast.py
-
+```
+rosrun ar_tag_toolbox robotino_control_tast.py
+```
 
 For questions, please write an email to mi.walde98@gmail.com.
