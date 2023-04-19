@@ -41,7 +41,7 @@ and make sure that the `ROS_IP` and `ROS_MASTER_URI` lines are commented out or 
 
 5. Install the following packages:
 
-https://github.com/meldew/ros_robotino_rest_pkg
+https://github.com/frdedynamics/ros_robotino_rest_pkg
 
 https://github.com/meldew/2023_Bachelor_Project_AGV_Docking
 
