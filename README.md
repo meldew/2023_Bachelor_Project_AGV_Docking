@@ -27,8 +27,7 @@ Installation:
 ```
 gedit ~/.bashrc 
 ```
-
-and make sure that the ROS_IP and ROS_MASTER_URI lines are commented out or deleted from the bottom of the file.
+and make sure that the `ROS_IP` and `ROS_MASTER_URI` lines are commented out or deleted from the bottom of the file.
  
 ![image](https://user-images.githubusercontent.com/47281451/233087819-5da66fd3-22f6-480d-abeb-9e251a6b521d.png)
 
@@ -69,16 +68,16 @@ roslaunch ar_tag_toolbox usb_cam.launch cam_id:=2
 roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
 ```
 5: Run the following command to see the ID of the AR Tag being detected:
-
-> rostopic echo /ar_pose_marker
-
+```
+rostopic echo /ar_pose_marker
+```
 # Robot Setup 
-1. Connect the camera to Remote PC via USB.
+1. Connect the camera to `Remote PC` via USB. (`Your one pc, not Robotino's Linux machine`)
 2. Run the following command to connect to Robotino:
 ```
 ssh robotino@172.31.1.145
 ```
-3. Start the REST API to Robotino:
+3. Start the `REST API` to Robotino:
 ```
 roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
 ```
@@ -86,34 +85,24 @@ roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
 ```
 roslaunch ar_tag_toolbox my_ar_track.launch
 ```
-5. In Robotino_tag_tracker.py, set target_marker to the ID of your AR tag.
-6. Check if all these packages are installed:
+5. In `Robotino_tag_tracker.py`, set target_marker to the `ID` of your `AR tag`.
 
 ![image](https://user-images.githubusercontent.com/47281451/233087925-e677eafa-ac74-4c86-aa96-db9d68995528.png)
 
-```
+6. Check if all these packages are installed in `Robotino_tag_tracker.py`:
+
+```python 
 from tf.transformations import euler_from_quaternion
-
 from ar_track_alvar_msgs.msg import AlvarMarkers
-
 from geometry_msgs.msg import Twist, PoseStamped
-
-from sensor_msgs.msg import Image
-
+from sensor_msgs.msg import Image 
 from nav_msgs.msg import Odometry
-
 import tf.transformations as tf
-
 import numpy as np
-
 import cv_bridge
-
 import cv2 as cv
-
 import rospy
-
 import math
-
 import time
 ```
 7. Save the file, place the tag in front of the camera, and run the following command:
@@ -127,4 +116,4 @@ rosrun ar_tag_toolbox robotino_control_tast.py
 ```
 # Cotanct Information
 > __Note__ : 
-For questions, please write an email to mi.walde98@gmail.com.
+For questions, please write an email to `mi.walde98@gmail.com`.
