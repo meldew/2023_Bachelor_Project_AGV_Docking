@@ -99,14 +99,15 @@ ssh robotino@172.31.1.145
 ```
 roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
 ```
-3. Start the AR tag tracker:
+3. In `Robotino_tag_tracker.py`, set target_marker to the `ID` of your `AR tag`.
+
+![image](https://user-images.githubusercontent.com/47281451/233087925-e677eafa-ac74-4c86-aa96-db9d68995528.png)
+
+4. Start the AR tag tracker:
 >__Note__ : Be aware of that once you run this line, robotino will start a serch sequence where robotino is turning untill it finds the AR_tag.
 ```
 roslaunch ar_tag_toolbox my_ar_track.launch
 ```
-4. In `Robotino_tag_tracker.py`, set target_marker to the `ID` of your `AR tag`.
-
-![image](https://user-images.githubusercontent.com/47281451/233087925-e677eafa-ac74-4c86-aa96-db9d68995528.png)
 
 5. Check if all these packages are installed in `Robotino_tag_tracker.py`:
 
