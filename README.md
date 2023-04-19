@@ -71,7 +71,8 @@ rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/
 4. Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
 ```
 roslaunch ar_tag_toolbox usb_cam.launch cam_id:=2
-
+```
+```
 roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
 ```
 5: Run the following command to see the ID of the AR Tag being detected:
