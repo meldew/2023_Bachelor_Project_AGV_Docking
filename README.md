@@ -16,7 +16,7 @@ This package has only been tested with ROS Melodic and VMware Workstation 17 Pla
 
  .
  
-Installation: 
+# Installation and VM setup: 
 
 
 ![image](https://user-images.githubusercontent.com/47281451/233087718-a2e8b6be-58f3-4842-9e0e-6317cbcdca4b.png)
