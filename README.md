@@ -1,55 +1,63 @@
 # 2023_Bachelor_Project_AGV_Docking
 Bachelor project on autonomous docking of an AGV (mobile base: Robotino, cobot:UR5)
 
-Setup Instructions
-NOTE: This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. Throughout the guide, make sure to follow the instructions for ROS Melodic and Robotino.
+# Setup Instructions 
+NOTE:
+This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. Throughout the guide, make sure to follow the instructions for ROS Melodic and Robotino.
 
 Installation
-Connect to the school's Robot 2G/5G network.
-In the "Edit Virtual Machine Settings" menu, select "Network Adapter" and choose "NAT: used to share the host's IP address".
-Check that the network settings on your VM machine are set to "auto".
-Run gedit ~/.bashrc and make sure that the ROS_IP and ROS_MASTER_URI lines are commented out or deleted from the bottom of the file.
-Install the following packages:
+1. Connect to the school's Robot 2G/5G network.
+2. In the "Edit Virtual Machine Settings" menu, select "Network Adapter" and choose "NAT: used to share the host's IP address".
+3. Check that the network settings on your VM machine are set to "auto".
+4. Run gedit ~/.bashrc and make sure that the ROS_IP and ROS_MASTER_URI lines are commented out or deleted from the bottom of the file.
+5. Install the following packages:
+
 https://github.com/meldew/ros_robotino_rest_pkg
+
 https://github.com/meldew/2023_Bachelor_Project_AGV_Docking
+
 http://wiki.ros.org/ar_track_alvar
-Once the packages are installed, start all nodes.
-Since Robotino does not have ROS installed, run all packages via Remote PC (i.e., your personal PC, not Robotino's Linux machine).
-Camera Calibration
-Before running the calibration program, run the following commands (if usb_cam is not already installed, install it now):
-Copy code
+
+6. Since Robotino does not have ROS installed, run all packages via Remote PC (i.e., your personal PC, not Robotino's Linux machine).
+# Camera Calibration
+
+1. Before running the calibration program, run the following commands (if usb_cam is not already installed, install it now):
+
 roscore
 rosrun usb_cam usb_cam_node
-Run the calibration program:
-arduino
-Copy code
+
+2. Run the calibration program:
+
 rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/usb_cam/image_raw camera:=/usb_cam
-Once the GUI is open, move a sheet of paper around in front of the webcam at different angles and distances until the "calibrate" button is highlighted. After it finishes calibrating, save and commit the calibration.
-Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
-go
-Copy code
+
+3. Once the GUI is open, move a sheet of paper around in front of the webcam at different angles and distances until the "calibrate" button is highlighted. After it finishes calibrating, save and commit the calibration.
+
+4. Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
+
 roslaunch ar_tag_toolbox usb_cam.launch cam_id:=2
 roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
-Run the following command to see the ID of the AR Tag being detected:
-bash
-Copy code
+
+5: Run the following command to see the ID of the AR Tag being detected:
+
 rostopic echo /ar_pose_marker
-Robot Setup
-Connect the camera to Remote PC via USB.
-Run the following command to connect to Robotino:
-css
-Copy code
+
+# Robot Setup 
+1. Connect the camera to Remote PC via USB.
+2. Run the following command to connect to Robotino:
+
 ssh robotino@172.31.1.145
-Start the REST API to Robotino:
-Copy code
+
+3. Start the REST API to Robotino:
+
 roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
-Start the AR tag tracker:
-Copy code
+
+4. Start the AR tag tracker:
+
 roslaunch ar_tag_toolbox my_ar_track.launch
-In Robotino_tag_tracker.py, set target_marker to the ID of your AR tag.
-Check if all these packages are installed:
-javascript
-Copy code
+
+5. In Robotino_tag_tracker.py, set target_marker to the ID of your AR tag.
+6. Check if all these packages are installed:
+
 from tf.transformations import euler_from_quaternion
 from ar_track_alvar_msgs.msg import AlvarMarkers
 from geometry_msgs.msg import Twist, PoseStamped
@@ -62,3 +70,12 @@ import cv2 as cv
 import rospy
 import math
 import time
+
+7. Save the file, place the tag in front of the camera, and run the following command:
+
+rosrun ar_tag_toolbox Robotino_tag_tracker.py
+
+
+Det er også mulighet for å styre robotino fra tastaturet, om ønskellig kan følgende kommando kjøres: 
+
+rosrun ar_tag_toolbox robotino_control_tast.py
