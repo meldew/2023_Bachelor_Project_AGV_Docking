@@ -125,5 +125,6 @@ It is also possible to control Robotino from the keyboard. If desired, the follo
 ```
 rosrun ar_tag_toolbox robotino_control_tast.py
 ```
-
+# Cotact Information
+> __Note__ : 
 For questions, please write an email to mi.walde98@gmail.com.
