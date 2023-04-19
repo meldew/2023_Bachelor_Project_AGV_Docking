@@ -136,4 +136,4 @@ rosrun ar_tag_toolbox robotino_control_tast.py
 ```
 # Cotanct Information
 > __Note__ : 
-For questions, please write an email to `mi.walde98@gmail.com`.
+For questions, please don't hesitate write and write me an email to `mi.walde98@gmail.com` or create an issue :relaxed: .
