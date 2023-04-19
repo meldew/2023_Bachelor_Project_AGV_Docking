@@ -1,6 +1,11 @@
 # 2023_Bachelor_Project_AGV_Docking
 Bachelor project on autonomous docking of an AGV (mobile base: Robotino, cobot:UR5)
 
+
+
+
+
+
 # Setup Instructions 
 NOTE:
 This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. Throughout the guide, make sure to follow the instructions for ROS Melodic and Robotino.
