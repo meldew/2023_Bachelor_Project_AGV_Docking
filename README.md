@@ -69,6 +69,11 @@ rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/
 
 
 4. Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
+4.1. To create a marker with for exemple id ‘123’ use folowing command: 
+```
+rosrun ar_track_alvar createMarker 123
+```
+Then : 
 ```
 roslaunch ar_tag_toolbox usb_cam.launch cam_id:=2
 ```
