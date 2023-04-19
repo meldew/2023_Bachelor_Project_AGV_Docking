@@ -110,6 +110,6 @@ rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/
 > rosrun ar_tag_toolbox Robotino_tag_tracker.py
 
 
-Det er også mulighet for å styre robotino fra tastaturet, om ønskellig kan følgende kommando kjøres: 
+It is also possible to control Robotino from the keyboard. If desired, the following command can be run: 
 
 > rosrun ar_tag_toolbox robotino_control_tast.py
