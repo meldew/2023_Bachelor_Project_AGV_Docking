@@ -79,6 +79,8 @@ Then :
 ```
 roslaunch ar_tag_toolbox usb_cam.launch cam_id:=2
 ```
+You can also run cam_id = 0 as a default if cam_id does not work
+
 ```
 roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
 ```
