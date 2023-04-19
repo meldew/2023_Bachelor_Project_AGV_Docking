@@ -89,6 +89,8 @@ roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
 rostopic echo /ar_pose_marker
 ```
 # Robot Setup 
+>__Note__ :
+>Since Robotino does not have ROS installed, run all packages via Remote PC (i.e., your personal PC, not Robotino's Linux machine).
 1. Run the following command to connect to Robotino:
 ```
 ssh robotino@172.31.1.145
@@ -98,6 +100,7 @@ ssh robotino@172.31.1.145
 roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
 ```
 3. Start the AR tag tracker:
+>__Note__ : Be aware of that once you run this line, robotino will start a serch sequence where robotino is turning untill it finds the AR_tag.
 ```
 roslaunch ar_tag_toolbox my_ar_track.launch
 ```
