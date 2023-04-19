@@ -48,14 +48,19 @@ http://wiki.ros.org/ar_track_alvar
 1. Before running the calibration program, run the following commands (if usb_cam is not already installed, install it now):
 ```
  roscore
+ ```
  
+ ```
  rosrun usb_cam usb_cam_node
 ```
 2. Run the calibration program:
-
+```
 rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/usb_cam/image_raw camera:=/usb_cam
-
+```
 3. Once the GUI is open, move a sheet of paper around in front of the webcam at different angles and distances until the "calibrate" button is highlighted. After it finishes calibrating, save and commit the calibration.
+
+![image](https://user-images.githubusercontent.com/47281451/233094555-78f01ae4-601a-4835-b6de-a154c5e1735d.png)
+
 
 4. Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
 ```
