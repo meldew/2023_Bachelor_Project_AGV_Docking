@@ -118,3 +118,6 @@ rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/
 It is also possible to control Robotino from the keyboard. If desired, the following command can be run: 
 
 > rosrun ar_tag_toolbox robotino_control_tast.py
+
+
+For questions, please write an email to mi.walde98@gmail.com.
