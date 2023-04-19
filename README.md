@@ -6,11 +6,24 @@ NOTE:
 This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. Throughout the guide, make sure to follow the instructions for ROS Melodic and Robotino.
 
 Installation
+
+![image](https://user-images.githubusercontent.com/47281451/233087718-a2e8b6be-58f3-4842-9e0e-6317cbcdca4b.png)
+
 1. Connect to the school's Robot 2G/5G network.
 2. In the "Edit Virtual Machine Settings" menu, select "Network Adapter" and choose "NAT: used to share the host's IP address".
-3. Check that the network settings on your VM machine are set to "auto".
-4. Run gedit ~/.bashrc and make sure that the ROS_IP and ROS_MASTER_URI lines are commented out or deleted from the bottom of the file.
-5. Install the following packages:
+3. 
+4. ![image](https://user-images.githubusercontent.com/47281451/233087765-1ea29109-e8ec-44db-9cb1-c4734efbdca3.png)
+5. 
+6. Check that the network settings on your VM machine are set to "auto".
+
+![image](https://user-images.githubusercontent.com/47281451/233087791-18f94cd3-e51c-4d5c-a45e-c037757fb8a0.png)
+
+8. Run gedit ~/.bashrc and make sure that the ROS_IP and ROS_MASTER_URI lines are commented out or deleted from the bottom of the file.
+9. 
+![image](https://user-images.githubusercontent.com/47281451/233087819-5da66fd3-22f6-480d-abeb-9e251a6b521d.png)
+
+
+6. Install the following packages:
 
 https://github.com/meldew/ros_robotino_rest_pkg
 
@@ -58,17 +71,31 @@ roslaunch ar_tag_toolbox my_ar_track.launch
 5. In Robotino_tag_tracker.py, set target_marker to the ID of your AR tag.
 6. Check if all these packages are installed:
 
+![image](https://user-images.githubusercontent.com/47281451/233087925-e677eafa-ac74-4c86-aa96-db9d68995528.png)
+
+
 from tf.transformations import euler_from_quaternion
+
 from ar_track_alvar_msgs.msg import AlvarMarkers
+
 from geometry_msgs.msg import Twist, PoseStamped
+
 from sensor_msgs.msg import Image
+
 from nav_msgs.msg import Odometry
+
 import tf.transformations as tf
+
 import numpy as np
+
 import cv_bridge
+
 import cv2 as cv
+
 import rospy
+
 import math
+
 import time
 
 7. Save the file, place the tag in front of the camera, and run the following command:
