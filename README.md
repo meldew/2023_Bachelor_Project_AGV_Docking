@@ -79,7 +79,7 @@ roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
 rostopic echo /ar_pose_marker
 ```
 # Robot Setup 
-1. Connect the camera to `Remote PC` via USB. (`Your one pc, not Robotino's Linux machine`)
+1. Connect the camera to `Remote PC` via USB. (`Your own pc, not Robotino's Linux machine`)
 2. Run the following command to connect to Robotino:
 ```
 ssh robotino@172.31.1.145
