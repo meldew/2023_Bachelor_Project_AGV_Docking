@@ -50,8 +50,8 @@ http://wiki.ros.org/ar_track_alvar
 6. Since Robotino does not have ROS installed, run all packages via Remote PC (i.e., your personal PC, not Robotino's Linux machine).
 
 # Camera Calibration
-
-1. Before running the calibration program, run the following commands :
+1. Connect the camera to `Remote PC` via USB. (`Your own pc, not Robotino's Linux machine`)
+2. Before running the calibration program, run the following commands :
 ```
  roscore
  ```
@@ -59,18 +59,18 @@ http://wiki.ros.org/ar_track_alvar
  ```
  rosrun usb_cam usb_cam_node
 ```
-2. Run the calibration program:
+3. Run the calibration program:
 ```
 rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.025 image:=/usb_cam/image_raw camera:=/usb_cam
 ```
-3. Once the GUI is open, move a sheet of paper around in front of the webcam at different angles and distances until the "calibrate" button is highlighted. After it finishes calibrating, save and then commit the calibration.
+4. Once the GUI is open, move a sheet of paper around in front of the webcam at different angles and distances until the "calibrate" button is highlighted. After it finishes calibrating, save and then commit the calibration.
 
 ![image](https://user-images.githubusercontent.com/47281451/233094555-78f01ae4-601a-4835-b6de-a154c5e1735d.png)
 
 
-4. Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
+5. Point the camera at your printed AR tags and run the following (replace the marker size and webcam number if needed):
 
-4.1. To create a marker with for exemple id ‘123’ use folowing command: 
+5.1. To create a marker with for exemple id ‘123’ use folowing command: 
 
 ```
 rosrun ar_track_alvar createMarker 123
@@ -84,29 +84,28 @@ You can also run cam_id = 0 as a default if cam_id=2 does not work
 ```
 roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
 ```
-5: Run the following command to see the ID of the AR Tag being detected:
+6: Run the following command to see the ID of the AR Tag being detected:
 ```
 rostopic echo /ar_pose_marker
 ```
 # Robot Setup 
-1. Connect the camera to `Remote PC` via USB. (`Your own pc, not Robotino's Linux machine`)
-2. Run the following command to connect to Robotino:
+1. Run the following command to connect to Robotino:
 ```
 ssh robotino@172.31.1.145
 ```
-3. Start the `REST API` to Robotino:
+2. Start the `REST API` to Robotino:
 ```
 roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
 ```
-4. Start the AR tag tracker:
+3. Start the AR tag tracker:
 ```
 roslaunch ar_tag_toolbox my_ar_track.launch
 ```
-5. In `Robotino_tag_tracker.py`, set target_marker to the `ID` of your `AR tag`.
+4. In `Robotino_tag_tracker.py`, set target_marker to the `ID` of your `AR tag`.
 
 ![image](https://user-images.githubusercontent.com/47281451/233087925-e677eafa-ac74-4c86-aa96-db9d68995528.png)
 
-6. Check if all these packages are installed in `Robotino_tag_tracker.py`:
+5. Check if all these packages are installed in `Robotino_tag_tracker.py`:
 
 ```python 
 from tf.transformations import euler_from_quaternion
@@ -122,7 +121,7 @@ import rospy
 import math
 import time
 ```
-7. Save the file, place the tag in front of the camera, and run the following command:
+6. Save the file, place the tag in front of the camera, and run the following command:
 ```
 rosrun ar_tag_toolbox Robotino_tag_tracker.py
 ```
