@@ -10,7 +10,8 @@ Bachelor project on autonomous docking of an AGV (mobile base: Robotino, cobot:U
 NOTE:
 This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. --Throughout the guide, make sure to follow the instructions for ROS Melodic and Robotino.
 Installation: 
-.
+
+
 ![image](https://user-images.githubusercontent.com/47281451/233087718-a2e8b6be-58f3-4842-9e0e-6317cbcdca4b.png)
 
 1. Connect to the school's Robot 2G/5G network.
