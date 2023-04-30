@@ -3,6 +3,17 @@ Bachelor project on autonomous docking of an AGV (mobile base: Robotino, cobot:U
 
 ---
 
+# Summary
+
+This bachelor thesis presents an autonomous parking solution for Robotino, a differential robot produced by Festo Didactic. The thesis is an initiative from the Polish company AIUT, which plans to mount a robot arm on top of an AGV and use it in production for various tasks.
+To calculate the correct offset for the robot arm, it is crucial that the AGV, which we simulate with Robotino, can be parked accurately at predefined positions.
+The solution uses AR tags, which provide Robotino with visual information about the parking space and its surroundings, allowing Robotino to park safely, accurately, and precisely using a custom navigation strategy.
+The result is a robot that can park autonomously, and measurements taken after the robot has parked.
+This is not a finished product.
+
+
+---
+
 Cotanct Information at the bottom of the giude! 
 
 # Intro video : 
