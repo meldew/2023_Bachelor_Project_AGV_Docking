@@ -1,11 +1,15 @@
 # 2023_Bachelor_Project_AGV_Docking
 Bachelor project on autonomous docking of an AGV (mobile base: Robotino, cobot:UR5)
 
+---
+
 Cotanct Information at the bottom of the giude! 
 
 # Intro video : 
 
 [![Autonomous precision parking with AR](https://user-images.githubusercontent.com/47281451/233119530-1f535c14-d888-4bf5-9a3e-b651063d2868.png)](https://www.youtube.com/watch?v=3h_kH3zjrUo&ab_channel=MikaelWalde "Everything Is AWESOME")
+
+---
 
 Introduction link.
 
@@ -13,7 +17,6 @@ Introduction link.
 `Before Reading:` 
 > __Warning__
 This package has only been tested with ROS Melodic and VMware Workstation 17 Player. It has not been tested with other ROS versions or on a clean Linux machine. --Throughout the guide, make sure that the following instructions are made for ROS Melodic and Robotino only! The robotic arm guide is `not included!`
-
 
 
  
@@ -49,6 +52,8 @@ https://github.com/meldew/2023_Bachelor_Project_AGV_Docking
 http://wiki.ros.org/ar_track_alvar
 
 6. Since Robotino does not have ROS installed, run all packages via Remote PC (i.e., your personal PC, not Robotino's Linux machine).
+
+---
 
 # Camera Calibration
 1. Connect the camera to `Remote PC` via USB. (`Your own pc, not Robotino's Linux machine`)
@@ -89,6 +94,8 @@ roslaunch ar_tag_toolbox ar_track_usb_cam.launch marker_size:=5
 ```
 rostopic echo /ar_pose_marker
 ```
+---
+
 # Robot Setup 
 >__Note__ :
 >Since Robotino does not have ROS installed, run all packages via Remote PC (i.e., your personal PC, not Robotino's Linux machine).
