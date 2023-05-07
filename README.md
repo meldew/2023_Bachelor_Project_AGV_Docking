@@ -112,7 +112,7 @@ rostopic echo /ar_pose_marker
 >Since Robotino does not have ROS installed, run all packages via Remote PC (i.e., your personal PC, not Robotino's Linux machine).
 1. Run the following command to connect to Robotino:
 ```
-ssh robotino@172.31.1.145
+ssh robotino@172.#######
 ```
 2. Start the `REST API` to Robotino:
 ```
