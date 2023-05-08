@@ -118,7 +118,7 @@ ssh robotino@172.#######
 ```
 roslaunch ros_robotino_rest_pkg single_robot_robotino.launch
 ```
-3. In `Robotino_tag_tracker.py`, `set target_marker` to the `ID` of your `AR tag`.
+3. In `Robotino_tag_tracker.py`, set `target_marker` to the `ID` of your `AR tag`.
 
 ![image](https://user-images.githubusercontent.com/47281451/233087925-e677eafa-ac74-4c86-aa96-db9d68995528.png)
 
