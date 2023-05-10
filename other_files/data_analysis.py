@@ -16,7 +16,7 @@ class Presition:
 		self.distances = distances
 		self.precition_tolerance = precition_tolerance
 		self.start_points = self.generate_points(self.center_point, self.accuracy_distances)
-		self.lengths = [1.2, 1.2, 2.3] # Averege lenght form hte starting point.
+		self.lengths = [2.4, 2.4, 3.6] # Averege lenght form hte starting point.
 	
 	def generate_points(self, start_points, distances) -> list:
 		"""
