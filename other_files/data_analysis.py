@@ -68,11 +68,11 @@ class Presition:
 		for i in range(len(self.start_points)):
 			axes.add_patch(Circle(self.start_points[i], precition_tolerance, fill=True, color=['red', 'blue', 'green'][i], alpha=0.2))
 			axes.plot(*zip(*random_points[i]), marker='o', color=['purple', 'blue', 'green'][i], linestyle='None')
-			axes.plot(*zip(self.start_points[i]), marker='o', color=['red', 'red', 'red'][i], linestyle='None')
+			axes.plot(*zip(self.start_points[i]), marker='o', color=['red', 'red', 'red'][i], linestyle='None',linewidth=2)
 		
 		axes.set_aspect('equal', adjustable='box')
 		plt.grid(color='black', linestyle=':', linewidth=0.5, alpha=0.5)
-		plt.title('Simpulating presition and accuracy of the robot from {} different start positions\n'
+		plt.title('Simulating presition and accuracy of the robot from {} different start positions\n'
 					'Where presition tolerance is set to {} mm'.format(len(self.start_points), precition_tolerance))
 		plt.xlabel('mm\n'+ str(self.Calculate_RSD(distances,precition_tolerance))+ '% of cases, the values will fall within the {} mm tolerance range.'.format(precition_tolerance))
 		plt.ylabel('mm')
