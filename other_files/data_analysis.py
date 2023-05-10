@@ -10,7 +10,6 @@ from matplotlib.patches import Circle
 # The `Presition` class generates a list of points based on a starting point and a list of distances,
 # and plots the points with a circle representing the precision tolerance.
 class Presition: 
-
 	def __init__(self, center_point:list, distances:list, precition_tolerance:int, accuracy_distances:list):
 		self.center_point = center_point
 		self.accuracy_distances = accuracy_distances
@@ -78,8 +77,7 @@ class Presition:
 		plt.xlabel('mm\n'+ str(self.Calculate_RSD(distances,precition_tolerance))+ '% of cases, the values will fall within the {} mm tolerance range.'.format(precition_tolerance))
 		plt.ylabel('mm')
 		plt.show()
-		
-		
+			
 # example of use
 distances = [[1,1,1,2,5,2,2,1,2,2,3,1,1,2,4,4,1,2,1,1], # First list is distances from first startpoint
              [2,5,3,4,2,2,3,2,4,2,3,1,3,1,1,1,1,3,1],   # Second list is distances from second startpoint
