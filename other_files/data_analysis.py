@@ -16,7 +16,6 @@ class Presition:
 		self.distances = distances
 		self.precition_tolerance = precition_tolerance
 		self.start_points = self.generate_points(self.center_point, self.accuracy_distances)
-		self.lengths = [2.4, 2.4, 3.6] # Averege lenght form hte starting point.
 	
 	def generate_points(self, start_points, distances) -> list:
 		"""
@@ -72,8 +71,9 @@ class Presition:
 		
 		axes.set_aspect('equal', adjustable='box')
 		plt.grid(color='black', linestyle=':', linewidth=0.5, alpha=0.5)
-		plt.title('Simulating presition and accuracy of the robot from {} different start positions\n'
+		plt.title('Simulating precition and accuracy of the robot from {} different start positions\n'
 					'Where presition tolerance is set to {} mm'.format(len(self.start_points), precition_tolerance))
+		axes.plot(*zip(self.center_point), marker='o', color='black', linestyle='None')
 		plt.xlabel('mm\n'+ str(self.Calculate_RSD(distances,precition_tolerance))+ '% of cases, the values will fall within the {} mm tolerance range.'.format(precition_tolerance))
 		plt.ylabel('mm')
 		plt.show()
@@ -84,7 +84,7 @@ distances = [[1,1,1,2,5,2,2,1,2,2,3,1,1,2,4,4,1,2,1,1], # First list is distance
              [2,2,1,2,1,1,3,5,3,4,3,2,3,2,5,2,2,2,2,3]] # Third list is distances from third startpoint
 precition_tolerance = 5 # in milimiters
 center_point = [5, 5]
-accuracy_distances = [3, 2, 1]
+accuracy_distances = [2.4/2, 2.4/2, 3.6/2]
 
 presition = Presition(center_point, distances, precition_tolerance, accuracy_distances)
 presition.plot()
