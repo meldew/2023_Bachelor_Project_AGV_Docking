@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+
+# The code is based on a generic approach for controling robots, detecting ar-tags in Python.
+# Adapted and implemented by Mikael Walde based on knowledge and examples from various programming resources.
+# The controlling part of the code is inspired by the https://github.com/ut-ims-robotics/ar_maze made by Veronika Podliensova and Veiko Vunder.
+# All method descriptions are made with AI "Mintlify Doc Writer for Python" extantion for VS Code.
+
 from tf.transformations import euler_from_quaternion
 from ar_track_alvar_msgs.msg import AlvarMarkers
 from geometry_msgs.msg import Twist,PoseStamped
@@ -59,7 +65,7 @@ def ar_pose_marker_cb(msg):
 	
 	:param msg: The message that is received from the topic
 	"""
-	global marker, distance_to_marker,marker_x_position, marker_is_detected, pitch  
+	global marker, distance_to_marker,marker_x_position, marker_is_detected, yaw  
 	n_of_markers_detected = len(msg.markers)
 	marker = msg.markers 
 	marker_is_detected = False
@@ -73,7 +79,7 @@ def ar_pose_marker_cb(msg):
 				distance_to_marker = marker[index].pose.pose.position.z
 				tag_pose = msg.markers[index].pose.pose
 				tag_orientation = tag_pose.orientation
-				roll, pitch, yaw = euler_from_quaternion([-tag_orientation.x, -tag_orientation.y, -tag_orientation.z, tag_orientation.w])
+				roll, yaw, pitch = euler_from_quaternion([-tag_orientation.x, -tag_orientation.y, -tag_orientation.z, tag_orientation.w])
 
 				if marker_is_detected == True and not marker_is_reached and not Parked_state:
 					final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
@@ -115,7 +121,6 @@ def follow_goal_target():
 			last_marker_x_position = last_marker_x_position[-1:]
 
 			if marker_is_detected == True and distance_to_marker > MAX_CALIBRATING_DISTANCE:
-				rospy.loginfo("Calibrating Distance")
 				twist = Twist()
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
@@ -123,16 +128,14 @@ def follow_goal_target():
 				rospy.loginfo(orientation_calibrated)
 
 			elif not orientation_calibrated and distance_to_marker < MAX_CALIBRATING_DISTANCE and marker_is_detected:
-				rospy.loginfo("Calibrating Orientation") 
 				twist = Twist()
 				twist.linear.x = 0.0
 				twist.linear.y = -marker_x_position * 0.8
-				twist.angular.z = -0.2 * pitch
+				twist.angular.z = -0.2 * yaw
 				move_cmd.publish(twist)
 				angular_z = twist.angular.z
 
 				if abs(marker_x_position) <= X_MARKER_PLACEMENT and abs(angular_z) <= ANGLE_TOLERANCE:
-					rospy.loginfo("Orientation is calibrated") 
 					orientation_calibrated = True
 
 			elif orientation_calibrated:
