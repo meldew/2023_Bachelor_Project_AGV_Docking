@@ -124,7 +124,6 @@ def follow_goal_target():
 				twist.linear.x = MAX_LINEAR_VEL
 				twist.angular.z = -0.6 * math.atan2(marker_x_position, distance_to_marker)
 				move_cmd.publish(twist)
-				rospy.loginfo(orientation_calibrated)
 
 			elif not orientation_calibrated and distance_to_marker < MAX_CALIBRATING_DISTANCE and marker_is_detected:
 				twist = Twist()
