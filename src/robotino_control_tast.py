@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# license removed for brevity
+#license removed for brevity
+#This code was developed by HVL Robotics. I am modifying and using the code for my project purposes with permission.
+    
 import rospy
 from geometry_msgs.msg import Twist
 import sys, select, os
