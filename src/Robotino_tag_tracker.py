@@ -275,16 +275,22 @@ def ar2cv_coordinate(marker_x_position, marker_y_position, z_distance):
 	x_max_at_z_min = 0.080
 	y_min_at_z_min = -0.060
 	y_max_at_z_min = 0.060
-
 	x_min_at_z_max = -0.34
 	x_max_at_z_max = 0.37
 	y_min_at_z_max = -0.25
-	y_max_at_z_max = 0.25									
-	scale = calculate_scale_factor(z_distance,z_min,z_max)
-	x_min = x_min_at_z_min + (x_min_at_z_max - x_min_at_z_min) * scale
-	x_max = x_max_at_z_min + (x_max_at_z_max - x_max_at_z_min) * scale
-	y_min = y_min_at_z_min + (y_min_at_z_max - y_min_at_z_min) * scale
-	y_max = y_max_at_z_min + (y_max_at_z_max - y_max_at_z_min) * scale
+	y_max_at_z_max = 0.25
+
+										
+	scale_factor = calculate_scale_factor(z_distance,z_min,z_max)
+	values = [x_min_at_z_min + (x_min_at_z_max - x_min_at_z_min), 	
+	   		  x_max_at_z_min + (x_max_at_z_max - x_max_at_z_min), 
+			  y_min_at_z_min + (y_min_at_z_max - y_min_at_z_min),
+			  y_max_at_z_min + (y_max_at_z_max - y_max_at_z_min)]
+			  
+	x_min = values[0] * scale_factor
+	x_max = values[1] * scale_factor
+	y_min = values[2] * scale_factor
+	y_max = values[3] * scale_factor
 
 	x_mapped = int(round(map_coordinate(marker_x_position, x_min, x_max, 0, 640)))
 	y_mapped = int(round(map_coordinate(marker_y_position, y_min, y_max, 0, 480)))
