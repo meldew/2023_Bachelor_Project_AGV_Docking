@@ -19,7 +19,6 @@ bridge = cv_bridge.CvBridge()
 # Publishing the message to the topic /cmd_vel.
 move_cmd = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
-
 #region Global variables 
 image = None
 angular_z = 0.0
@@ -76,14 +75,14 @@ def ar_pose_marker_cb(msg):
 				roll, pitch, yaw = euler_from_quaternion([-tag_orientation.x, -tag_orientation.y, -tag_orientation.z, tag_orientation.w])
 
 				if marker_is_detected == True and not marker_is_reached and not Parked_state:
-					final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
+					final_x, final_y = ar2cv_coordinate(marker_x_position,marker_y_position,distance_to_marker)
 					cv.circle(image,(final_x,final_y),6, (0, 255, 0), -1)
 					cv.putText(image, str(round(distance_to_marker * 100)) + " cm to Target!",(final_x + 40,final_y + 40), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 					cv.putText(image, "Moving to target.",(200, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 
 				elif Parked_state == True: 
 					cv.putText(image, "Parked!",(300, 20), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
-					final_x, final_y = ar2cv2_coordinate(marker_x_position,marker_y_position,distance_to_marker)
+					final_x, final_y = ar2cv_coordinate(marker_x_position,marker_y_position,distance_to_marker)
 					cv.circle(image,(final_x,final_y),6, (0, 255, 0), -1)
 					cv.putText(image, str(round(distance_to_marker * 100)) + " cm to Target!",(final_x + 40,final_y + 40), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0,0,255),2)
 				
@@ -257,7 +256,7 @@ def qt2eul_func(x,y,z,w):
 	return Htm
 		
 
-def ar2cv2_coordinate(marker_x_position, marker_y_position, z_distance):
+def ar2cv_coordinate(marker_x_position, marker_y_position, z_distance):
 	"""
 	The function takes the marker's x and y position in the AR coordinate system and the distance from
 	the camera to the marker, and returns the marker's x and y position in the OpenCV coordinate system
