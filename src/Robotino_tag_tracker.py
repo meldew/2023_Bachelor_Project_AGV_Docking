@@ -279,8 +279,7 @@ def ar2cv_coordinate(marker_x_position, marker_y_position, z_distance):
 	x_max_at_z_max = 0.37
 	y_min_at_z_max = -0.25
 	y_max_at_z_max = 0.25
-
-										
+									
 	scale_factor = calculate_scale_factor(z_distance,z_min,z_max)
 	values = [x_min_at_z_min + (x_min_at_z_max - x_min_at_z_min), 	
 	   		  x_max_at_z_min + (x_max_at_z_max - x_max_at_z_min), 
