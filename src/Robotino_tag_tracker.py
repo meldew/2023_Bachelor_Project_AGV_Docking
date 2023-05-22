@@ -270,25 +270,25 @@ def ar2cv_coordinate(marker_x_position, marker_y_position, z_distance):
 	"""
 	z_min = 0.20
 	z_max = 0.90
-	x_min_at_z_min = -0.074
-	x_max_at_z_min = 0.080
-	y_min_at_z_min = -0.060
-	y_max_at_z_min = 0.060
-	x_min_at_z_max = -0.34
-	x_max_at_z_max = 0.37
-	y_min_at_z_max = -0.25
-	y_max_at_z_max = 0.25
+	negX_at_z_min = -0.074
+	posX_at_z_min = 0.080
+	negY_at_z_min = -0.060
+	posY_at_z_min = 0.060
+	negX_at_z_max = -0.34
+	posX_at_z_max = 0.37
+	negX_at_z_max = -0.25
+	posY_at_z_max = 0.25
 									
 	scale_factor = calculate_scale_factor(z_distance,z_min,z_max)
-	values = [x_min_at_z_min + (x_min_at_z_max - x_min_at_z_min), 	
-	   		  x_max_at_z_min + (x_max_at_z_max - x_max_at_z_min), 
-			  y_min_at_z_min + (y_min_at_z_max - y_min_at_z_min),
-			  y_max_at_z_min + (y_max_at_z_max - y_max_at_z_min)]
+	min_values = [negX_at_z_min + (negX_at_z_max - negX_at_z_min), 	
+	   		  posX_at_z_min + (posX_at_z_max - posX_at_z_min), 
+			  negY_at_z_min + (negX_at_z_max - negY_at_z_min),
+			  posY_at_z_min + (posY_at_z_max - posY_at_z_min)]
 			  
-	x_min = values[0] * scale_factor
-	x_max = values[1] * scale_factor
-	y_min = values[2] * scale_factor
-	y_max = values[3] * scale_factor
+	x_min = min_values[0] * scale_factor
+	x_max = min_values[1] * scale_factor
+	y_min = min_values[2] * scale_factor
+	y_max = min_values[3] * scale_factor
 
 	x_mapped = int(round(map_coordinate(marker_x_position, x_min, x_max, 0, 640)))
 	y_mapped = int(round(map_coordinate(marker_y_position, y_min, y_max, 0, 480)))
