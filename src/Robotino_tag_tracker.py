@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# The code is based on a generic approach for controling robots, detecting ar-tags in Python.
+# The code is based on a generic approach for controling robots and detecting ar-tags in Python.
 # Adapted and implemented by Mikael Walde based on knowledge and examples from various programming resources.
 # The controlling part of the code is inspired by the https://github.com/ut-ims-robotics/ar_maze made by Veronika Podliensova and Veiko Vunder.
 # All method descriptions are made with AI "Mintlify Doc Writer for Python" extantion for VS Code.
