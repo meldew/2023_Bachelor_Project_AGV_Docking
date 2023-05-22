@@ -1,4 +1,5 @@
-# The code is based on a generic approach for generating plots with circles and random points around them in Python.
+# The code is based on a generic approach for generating plots and random points.
+# For generating points within the a defined sircle this referance is used https://stackoverflow.com/questions/30564015/how-to-generate-random-points-in-a-circular-distribution
 # Adapted and implemented by Mikael Walde based on knowledge and examples from various programming resources.
 # All method descriptions are made with AI "Mintlify Doc Writer for Python" extantion for VS Code.
 
