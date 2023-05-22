@@ -273,9 +273,9 @@ def ar2cv_coordinate(marker_x_position, marker_y_position, z_distance):
 
 	scale_factor = calculate_scale_factor(z_distance,common.z_min,common.z_max)
 	min_values = [common.negX_at_z_min + (common.negX_at_z_max - common.negX_at_z_min), 
-	       		  common.posX_at_z_min + (common.posX_at_z_max - common.posX_at_z_min), 
-				  common.negY_at_z_min + (common.negX_at_z_max - common.negY_at_z_min),
-				  common.posY_at_z_min + (common.posY_at_z_max - common.posY_at_z_min)] 	
+				common.posX_at_z_min + (common.posX_at_z_max - common.posX_at_z_min), 
+				common.negY_at_z_min + (common.negX_at_z_max - common.negY_at_z_min),
+				common.posY_at_z_min + (common.posY_at_z_max - common.posY_at_z_min)] 	
 				
 			  
 	x_min = min_values[0] * scale_factor
