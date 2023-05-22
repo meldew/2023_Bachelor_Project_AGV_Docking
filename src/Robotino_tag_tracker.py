@@ -11,6 +11,7 @@ from geometry_msgs.msg import Twist,PoseStamped
 from sensor_msgs.msg import	Image
 from nav_msgs.msg import Odometry
 import tf.transformations as tf
+import Common
 import numpy as np
 import cv_bridge
 import cv2 as cv
@@ -268,22 +269,14 @@ def ar2cv_coordinate(marker_x_position, marker_y_position, z_distance):
 	:param z_distance: The distance from the camera to the marker
 	:return: The x and y coordinates of the marker in the image.
 	"""
-	z_min = 0.20
-	z_max = 0.90
-	negX_at_z_min = -0.074
-	posX_at_z_min = 0.080
-	negY_at_z_min = -0.060
-	posY_at_z_min = 0.060
-	negX_at_z_max = -0.34
-	posX_at_z_max = 0.37
-	negX_at_z_max = -0.25
-	posY_at_z_max = 0.25
-									
-	scale_factor = calculate_scale_factor(z_distance,z_min,z_max)
-	min_values = [negX_at_z_min + (negX_at_z_max - negX_at_z_min), 	
-	   		  posX_at_z_min + (posX_at_z_max - posX_at_z_min), 
-			  negY_at_z_min + (negX_at_z_max - negY_at_z_min),
-			  posY_at_z_min + (posY_at_z_max - posY_at_z_min)]
+	common = Common()	
+
+	scale_factor = calculate_scale_factor(z_distance,common.z_min,common.z_max)
+	min_values = [common.negX_at_z_min + (common.negX_at_z_max - common.negX_at_z_min), 
+	       		  common.posX_at_z_min + (common.posX_at_z_max - common.posX_at_z_min), 
+				  common.negY_at_z_min + (common.negX_at_z_max - common.negY_at_z_min),
+				  common.posY_at_z_min + (common.posY_at_z_max - common.posY_at_z_min)] 	
+				
 			  
 	x_min = min_values[0] * scale_factor
 	x_max = min_values[1] * scale_factor
