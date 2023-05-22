@@ -47,7 +47,7 @@ class Presition:
 		"""
 		points = []
 		for distance in distances:
-			angle = random.uniform(0, 2*math.pi)
+			angle = random.uniform(0, 2 * math.pi)
 			x = start_points[0] + distance * math.cos(angle)
 			y = start_points[1] + distance * math.sin(angle)
 			points.append((x, y))
