@@ -9,7 +9,7 @@ This bachelor thesis presents an autonomous parking solution for Robotino, a dif
 Festo Didactic. The solution utilizes AR tags to provide visual information to Robotino, enabling accurate and
 precise parking at predefined positions. The aim is to mount a robot arm on top of an AGV for various
 production tasks. The focus of the developed code is on structure and clarity, allowing room for future
-development. This is not a finished product. The prototype has been successfully developed, and accuracy and precision tests have been completed. With this project/method, I have achieved a precision of ± 5 millimeters in 100% of cases and ± 3 millimeters in 85% of cases. The accuracy of the mobile base is 12 millimeters in 100% of cases.
+development. This is not a finished product. The prototype has been successfully developed, and accuracy and precision tests have been completed. With this project, I have achieved a precision of ± 5 millimeters in 100% of cases and ± 3 millimeters in 85% of cases. The accuracy of the mobile base is 12 millimeters in 100% of cases.
 
 ![image](https://github.com/meldew/2023_Bachelor_Project_AGV_Docking/assets/47281451/c10974fe-110f-449d-8e4b-96795b9f05b1)
 
