@@ -5,7 +5,10 @@ Bachelor project on autonomous docking of an AGV (mobile base: Robotino, cobot:U
 
 # Abstract
 
-Noe noe noe 
+The project is about a robot that can autonomously park using AR tags and measurements taken after the robot has parked. This is not a finished product. The prototype has been successfully developed, and accuracy and precision tests have been completed. With this project/method, I have achieved a precision of ± 5 millimeters in 100% of cases and ± 3 millimeters in 85% of cases. The accuracy of the mobile base is 12 millimeters in 100% of cases.
+
+![image](https://github.com/meldew/2023_Bachelor_Project_AGV_Docking/assets/47281451/c10974fe-110f-449d-8e4b-96795b9f05b1)
+
 
 
 ---
